@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean name="userForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="userId" type="java.lang.Integer" />
+			<form-property name="userLogin" type="java.lang.String" />
+			<form-property name="userPass" type="java.lang.String" />
+			<form-property name="userNicename" type="java.lang.String" />
+			<form-property name="newUserPass" type="java.lang.String" />
+		</form-bean>
+	</form-beans>
+
+	<action-mappings>
+		<action path="/manager/user" name="userForm" scope="request" type="com.younger.manager.web.action.UserAction" parameter="method">
+			<forward name="login" path="/pages/manager/userLogin.jsp" />
+			<forward name="pwd" path="/pages/manager/userPwd.jsp" />
+			<forward name="edit" path="/pages/manager/userEdit.jsp" />
+		</action>
+	</action-mappings>
+</struts-config>

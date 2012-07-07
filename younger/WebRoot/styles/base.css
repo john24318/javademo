@@ -1,0 +1,140 @@
+@CHARSET "UTF-8";
+
+body {
+	background: #95B34E url(../images/body_bg.png) repeat-x scroll top left;
+	margin: 0;
+	padding: 0;
+}
+
+h1,h2,h3,h4,h5,h6,p,ul,li,form,input,fieldset,img {
+	margin: 0px;
+	padding: 0px;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+img {
+	border: 0;
+}
+
+#container {
+	margin: 0 auto;
+	width: 960px;
+	text-align: center;
+}
+
+#header {
+	margin: 0 auto;
+	background: transparent url(../images/header_bg.gif) repeat-x scroll
+		left bottom;
+}
+
+#title {
+	float: left;
+	padding: 32px 0 14px 13px;
+	width: auto;
+}
+
+#title a {
+	color: #63665D;
+	text-decoration: none;
+}
+
+#menu {
+	float: right;
+	padding: 41px 6px 0 0;
+	width: 550px;
+}
+
+#menu ul {
+	float: right;
+	width: auto;
+}
+
+#menu li {
+	float: left;
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+	margin: 0 0 0 11px;
+	padding: 0;
+}
+
+#menu li a {
+	background: transparent url(../images/menu_bg.png) repeat-x scroll left
+		top;
+	border-bottom: 3px solid #A8CA42;
+	color: #63665D;
+	cursor: pointer;
+	float: left;
+	font-family: Tahoma;
+	font-size: 12px;
+	padding: 0;
+	text-decoration: none;
+}
+
+#menu li a img {
+	border: medium none;
+}
+
+#menu li a span {
+	float: left;
+	height: 15px;
+	padding: 9px 10px 7px;
+	height: 15px;
+}
+
+#center {
+	clear: both;
+	margin: 0 auto;
+}
+
+#footer {
+	margin: 0 auto;
+}
+
+#center fieldset {
+	margin: 210px auto;
+	padding: 0 10px;
+	width: 300px;
+}
+
+fieldset legend {
+	color: black;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+fieldset ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+fieldset li {
+	margin: 0;
+	padding: 10px 0;
+	clear: both;
+}
+
+fieldset label {
+	float: left;
+}
+
+fieldset input {
+	float: right;
+}
+
+.error {
+	color: red;
+}

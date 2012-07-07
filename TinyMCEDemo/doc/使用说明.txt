@@ -1,0 +1,8 @@
+一、安装
+	1. 从http://tinymce.moxiecode.com/download.php下载“Main package”和“Language packs”。
+	2. 解压“Main package”文件（即tinymce_x_x_x.zip）到当前目录，拷贝解压后的tinymce到网站根目录。
+	3. 解压“Language packs”文件（即tinymce_lang_pack.zip）到tinymce\jscripts\tiny_mce目录。
+
+二、配置
+	1. 新建scripts\tinymce\config.js文件。
+	2. 

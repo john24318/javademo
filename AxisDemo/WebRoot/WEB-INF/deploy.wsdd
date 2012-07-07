@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<service name="HelloWorld" provider="java:RPC">
+		<parameter name="className" value="com.wangyao.service.HelloWorld" />
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="scope" value="request" />
+	</service>
+
+	<service name="AddressService" provider="java:RPC">
+		<parameter name="className" value="com.wangyao.service.AddressService" />
+		<parameter name="allowedMethods" value="*" />
+		<!-- qname里的Address要和程序里的new QName("urn:AddressService", "Address")里的后面的值相同-->
+		<beanMapping qname="myNSD:Address" xmlns:myNSD="urn:AddressService" languageSpecificType="java:com.wangyao.service.Address" />
+	</service>
+</deployment>

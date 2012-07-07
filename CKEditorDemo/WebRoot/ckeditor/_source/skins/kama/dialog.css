@@ -1,0 +1,419 @@
+/*
+Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+For licensing, see LICENSE.html or http://ckeditor.com/license
+*/
+
+/* Restore the dialog visibility */
+body .cke_dialog
+{
+	visibility: visible;
+}
+
+.cke_skin_kama .cke_dialog_body
+{
+	z-index: 1;
+	border: solid 1px #ddd;
+	padding: 5px;
+	background-color: #fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.cke_skin_kama .cke_dialog_tl,
+.cke_skin_kama .cke_dialog_tr,
+.cke_skin_kama .cke_dialog_tc,
+.cke_skin_kama .cke_dialog_bl,
+.cke_skin_kama .cke_dialog_br,
+.cke_skin_kama .cke_dialog_bc,
+.cke_skin_kama .cke_dialog_ml,
+.cke_skin_kama .cke_dialog_mr
+{
+	display:none;
+}
+
+.cke_skin_kama .cke_dialog_title
+{
+	font-weight: bold;
+	font-size: 14px;
+	padding: 3px 3px 8px;
+	cursor: move;
+	position: relative;
+	border-bottom: 1px solid #eee;
+}
+
+.cke_skin_kama .cke_browser_iequirks .cke_dialog_title,
+.cke_skin_kama .cke_browser_ie6 .cke_dialog_title,
+.cke_skin_kama .cke_browser_ie7 .cke_dialog_title
+{
+	margin-bottom: 22px;
+}
+
+.cke_skin_kama .cke_browser_iequirks.cke_single_page .cke_dialog_title,
+.cke_skin_kama .cke_browser_ie6.cke_single_page .cke_dialog_title,
+.cke_skin_kama .cke_browser_ie7.cke_single_page .cke_dialog_title
+{
+	margin-bottom: 10px;
+}
+
+.cke_skin_kama .cke_browser_ie.cke_rtl .cke_dialog_title
+{
+	position: static !important;
+	unicode-bidi: bidi-override;
+}
+
+.cke_skin_kama .cke_dialog_contents
+{
+	background-color: #ebebeb;
+	border: solid 1px #fff;
+	border-bottom: none;
+	overflow: auto;
+	padding: 17px 10px 5px 10px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	margin-top: 22px;
+}
+
+.cke_skin_kama .cke_dialog_footer
+{
+	text-align: right;
+	background-color: #ebebeb;
+	border: solid 1px #fff;
+	border-bottom: none;
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.cke_skin_kama .cke_rtl .cke_dialog_footer
+{
+	text-align: left;
+}
+
+/* tabs */
+
+.cke_skin_kama .cke_dialog_tabs
+{
+	height: 23px;
+	display: inline-block;
+	_display: block;
+	margin-left:10px;
+	margin-right:10px;
+	margin-top: 11px;
+	position: absolute;
+	z-index: 2;
+}
+
+.cke_skin_kama .cke_browser_iequirks .cke_dialog_tabs,
+.cke_skin_kama .cke_browser_ie6 .cke_dialog_tabs,
+.cke_skin_kama .cke_browser_ie7 .cke_dialog_tabs
+{
+	top: 33px;
+}
+
+.cke_skin_kama .cke_rtl .cke_dialog_tabs
+{
+	right: 10px;
+}
+
+.cke_skin_kama a.cke_dialog_tab,
+.cke_skin_kama a:link.cke_dialog_tab,
+.cke_skin_kama a:active.cke_dialog_tab,
+.cke_skin_kama a:hover.cke_dialog_tab,
+.cke_skin_kama a:visited.cke_dialog_tab
+{
+	background-image: url(images/sprites.png);
+	background-repeat: repeat-x;
+	background-position: 0 -1323px;
+
+	background-color: #ebebeb;
+	height: 14px;
+	padding: 4px 8px;
+	display: inline-block;
+	cursor: pointer;
+
+}
+
+/* Gecko 1.8 layout workaround. */
+.cke_skin_kama .cke_browser_gecko18 a.cke_dialog_tab,
+.cke_skin_kama .cke_browser_gecko18 a:link.cke_dialog_tab,
+.cke_skin_kama .cke_browser_gecko18 a:active.cke_dialog_tab,
+.cke_skin_kama .cke_browser_gecko18 a:hover.cke_dialog_tab,
+.cke_skin_kama .cke_browser_gecko18 a:visited.cke_dialog_tab
+{
+	display: inline;
+	position: relative;
+	top: 6px;
+}
+
+.cke_skin_kama a:hover.cke_dialog_tab
+{
+	background-color: #f1f1e3;
+}
+
+.cke_skin_kama a.cke_dialog_tab_selected,
+.cke_skin_kama a:link.cke_dialog_tab_selected,
+.cke_skin_kama a:active.cke_dialog_tab_selected,
+.cke_skin_kama a:hover.cke_dialog_tab_selected,
+.cke_skin_kama a:visited.cke_dialog_tab_selected
+{
+	background-position: 0 -1279px;
+	cursor: default;
+}
+
+/* single_page */
+
+.cke_skin_kama .cke_single_page .cke_dialog_tabs
+{
+	display: none;
+}
+
+.cke_skin_kama .cke_single_page .cke_dialog_contents
+{
+	padding-top: 5px;
+	margin-top: 10px;
+}
+
+/* IE7 + IE quirks */
+.cke_skin_kama .cke_browser_ie7.cke_single_page .cke_dialog_contents
+{
+	margin-top: -10px;
+	position: relative;
+	margin-bottom: -22px;
+}
+
+.cke_skin_kama .cke_dialog_ui_vbox table,
+.cke_skin_kama .cke_dialog_ui_hbox table
+{
+	margin: auto;
+}
+
+.cke_skin_kama .cke_dialog_ui_vbox_child
+{
+	padding: 5px 0px;
+}
+
+.cke_skin_kama input.cke_dialog_ui_input_text,
+.cke_skin_kama input.cke_dialog_ui_input_password
+{
+	background-color: white;
+	border: none;
+	padding: 0px;
+	width: 100%;
+	height: 14px;
+}
+
+.cke_skin_kama div.cke_dialog_ui_input_text,
+.cke_skin_kama div.cke_dialog_ui_input_password
+{
+	background-color: white;
+	border: 1px solid #a0a0a0;
+	padding: 1px 0px;
+}
+
+.cke_skin_kama textarea.cke_dialog_ui_input_textarea
+{
+	background-color: white;
+	border: none;
+	padding: 0px;
+	width: 100%;
+	/*
+	 * IE6 BUG: Scrollbars in textareas can overflow even if the outer DIV is set to overflow:hidden.
+	 * So leave 1% width for the scrollbar. In most situations the 1% isn't noticeable by users.
+	 */
+	_width: 99%;
+	overflow: auto;
+	resize: none;
+}
+
+.cke_skin_kama div.cke_dialog_ui_input_textarea
+{
+	background-color: white;
+	border: 1px solid #a0a0a0;
+	padding: 1px 0px;
+}
+
+.cke_skin_kama div.cke_disabled .cke_dialog_ui_labeled_content *
+{
+	background-color : #a0a0a0;
+	cursor : default;
+}
+
+.cke_skin_kama .cke_dialog_ui_hbox
+{
+	width: 100%;
+}
+
+.cke_skin_kama .cke_dialog_ui_hbox_first,
+.cke_skin_kama .cke_dialog_ui_hbox_child,
+.cke_skin_kama .cke_dialog_ui_hbox_last
+{
+	vertical-align: top;
+}
+
+.cke_skin_kama .cke_ltr .cke_dialog_ui_hbox_first,
+.cke_skin_kama .cke_ltr .cke_dialog_ui_hbox_child
+{
+	padding-right: 10px;
+}
+
+.cke_skin_kama .cke_rtl .cke_dialog_ui_hbox_first,
+.cke_skin_kama .cke_rtl .cke_dialog_ui_hbox_child
+{
+	padding-left: 10px;
+}
+
+/* button */
+
+.cke_skin_kama a.cke_dialog_ui_button
+{
+	border-collapse: separate;
+	cursor: default;
+
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background: transparent url(images/sprites.png) repeat-x scroll 0 -1069px;
+	_background: none;
+	padding: 5px 0;
+}
+
+.cke_skin_kama .cke_browser_iequirks a.cke_dialog_ui_button
+{
+	padding: 0;
+}
+
+/* IE6 buttons. */
+.cke_skin_kama .cke_browser_ie6 a.cke_dialog_ui_button span
+{
+	width: 70px;
+}
+
+.cke_skin_kama .cke_browser_iequirks a.cke_dialog_ui_button span,
+.cke_skin_kama .cke_browser_iequirks a.cke_dialog_ui_button span
+{
+	width: 100px;
+}
+
+.cke_skin_kama .cke_browser_iequirks a.cke_dialog_ui_button span,
+.cke_skin_kama .cke_browser_iequirks a.cke_dialog_ui_button span,
+.cke_skin_kama .cke_browser_ie6 a.cke_dialog_ui_button span
+{
+	padding: 5px 15px;
+	text-align: center;
+	color: #3b3b1f;
+	background: #53D9F0 none;
+	display: inline-block;
+	cursor: default;
+}
+/* END IE6 buttons. */
+
+.cke_skin_kama .cke_browser_webkit a.cke_dialog_ui_button span.cke_dialog_ui_button
+{
+	margin: 0;
+}
+.cke_skin_kama .cke_browser_webkit a.cke_dialog_ui_button
+{
+	float: right;
+	padding-top: 3px;
+	padding-bottom: 2px;
+	margin: 2px 0;
+}
+
+.cke_skin_kama a.cke_dialog_ui_button_ok span,
+.cke_skin_kama a.cke_dialog_ui_button_cancel span
+{
+	padding-right: 20px;
+	padding-left: 20px;
+}
+
+.cke_skin_kama a.cke_dialog_ui_button_ok
+{
+	background-position: 0 -1143px;
+}
+
+.cke_skin_kama a.cke_dialog_ui_button_ok span
+{
+	background: transparent url(images/sprites.png) no-repeat scroll right -1219px;
+}
+
+.cke_skin_kama .cke_rtl a.cke_dialog_ui_button_ok span
+{
+	background-position: left -1219px;
+}
+
+.cke_skin_kama .cke_browser_iequirks a.cke_dialog_ui_button_ok span,
+.cke_skin_kama .cke_browser_ie6 a.cke_dialog_ui_button_ok span
+{
+	background-color: #B8E834;
+	margin-right: 0;
+}
+
+.cke_skin_kama a.cke_dialog_ui_button_cancel
+{
+	background-position: 0 -1104px;
+}
+
+.cke_skin_kama a.cke_dialog_ui_button_cancel span
+{
+	background: transparent url(images/sprites.png) no-repeat scroll right -1245px;
+}
+
+.cke_skin_kama .cke_rtl a.cke\ L O G F I L E S \ S C M \ C 2 2 5 6 A 5 1 - 1 2 A 3 - 4 7 0 5 - 8 2 B 7 - 1 C 1 7 E 5 C B 5 C E 5  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ M I C R O S O F T \ W I N D O W S \ M E D I A   C E N T E R \ P B D A D I S C O V E R Y W 2  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ C A 8 1 4 A 6 B - 9 3 2 F - 4 3 6 3 - B 3 D 4 - 0 6 A 7 6 9 F 7 9 F 2 2  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ M I C R O S O F T \ W I N D O W S \ A P P L I C A T I O N   E X P E R I E N C E \ A I T A G E N T  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ D 2 1 F 6 0 2 4 - 1 9 1 F - 4 4 5 4 - B B B C - 0 9 A 6 5 0 D A 2 5 4 9  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ M I C R O S O F T \ W I N D O W S \ M E D I A   C E N T E R \ O C U R A C T I V A T E  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ D 3 5 6 2 8 8 6 - 2 F A 7 - 4 D 5 F - B C 0 7 - 4 1 7 D 5 F 4 A 5 2 F 5  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ M I C R O S O F T \ W I N D O W S \ U P N P \ U P N P H O S T C O N F I G  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ D 6 2 2 1 9 5 C - D 6 8 0 - 4 F E A - 9 C 5 6 - 5 9 6 6 0 C 7 C 9 E 9 4  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ M I C R O S O F T \ W I N D O W S \ D I S K D I A G N O S T I C \ M I C R O S O F T - W I N D O W S - D I S K D I A G N O S T I C D A T A C O L L E C T O R  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ D 7 5 9 5 4 3 C - 8 F 5 B - 4 1 7 9 - 8 7 6 E - F 9 1 F 9 5 5 D 1 3 2 9  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ M I C R O S O F T \ W I N D O W S \ R E G I S T R Y \ R E G I D L E B A C K U P  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ D 8 B B 5 B 7 F - D 0 C A - 4 F 6 7 - A 3 D 7 - 7 3 E 1 D 0 5 F 6 3 D A  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ W P D \ S Q M U P L O A D _ S - 1 - 5 - 2 1 - 1 0 6 6 5 6 1 1 8 8 - 8 3 2 9 7 9 7 2 6 - 1 8 5 1 9 2 8 2 5 8 - 5 2 2 9 0  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ E 1 4 F 0 9 A A - 9 9 8 C - 4 2 A 6 - A D 1 7 - A 5 B D E 3 6 0 C 7 6 9  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ M I C R O S O F T \ W I N D O W S \ N E T T R A C E \ G A T H E R N E T W O R K I N F O  
+ C : \ P R O G R A M D A T A \ M I C R O S O F T \ W I N D O W S \ C A C H E S \ C V E R S I O N S . 2 . D B  
+ C : \ P R O G R A M D A T A \ M I C R O S O F T \ W I N D O W S \ C A C H E S \ { 6 A F 0 6 9 8 E - D 5 5 8 - 4 F 6 E - 9 B 3 C - 3 7 1 6 6 8 9 A F 4 9 3 } . 2 . V E R 0 X 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9 . D B  
+ C : \ P R O G R A M D A T A \ M I C R O S O F T \ W I N D O W S \ C A C H E S \ { D D F 5 7 1 F 2 - B E 9 8 - 4 2 6 D - 8 2 8 8 - 1 A 9 A 3 9 C 3 F D A 2 } . 2 . V E R 0 X 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 . D B  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ E 8 1 6 4 C 0 D - 2 1 6 C - 4 B 6 B - 9 E B 8 - 3 1 B F 9 5 8 B 8 0 1 4  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ M I C R O S O F T \ W I N D O W S \ L O C A T I O N \ N O T I F I C A T I O N S  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ F 9 3 C 7 1 0 4 - 9 9 8 A - 4 A 3 8 - B 9 3 5 - 7 7 5 A 3 1 3 8 B 3 C 3  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ M I C R O S O F T \ W I N D O W S \ M E D I A   C E N T E R \ M C U P D A T E  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ F 9 E C 3 D C E - 9 E 0 2 - 4 7 9 8 - A 5 E D - 5 5 4 2 B C 3 7 3 C 1 E  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ T A S K S \ M I C R O S O F T \ W I N D O W S \ T A S K   M A N A G E R \ I N T E R A C T I V E  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ L O G F I L E S \ S C M \ F F B 8 4 8 6 A - 9 8 6 1 - 4 B 8 2 - B E 3 8 - C 7 F 8 F B 1 B 6 6 0 5  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ G P S C R I P T . E X E  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ N L A S V C . D L L  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ W E B I O . D L L  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ H T T P A P I . D L L  
+ C : \ P R O G R A M   F I L E S \ H C S \ B I N \ Q H C S . E X E  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ M S C O R E E . D L L  
+ C : \ W I N D O W S \ M I C R O S O F T . N E T \ F R A M E W O R K \ V 2 . 0 . 5 0 7 2 7 \ M S C O R W K S . D L L  
+ C : \ W I N D O W S \ M I C R O S O F T . N E T \ F R A M E W O R K \ V 2 . 0 . 5 0 7 2 7 \ C O N F I G \ M A C H I N E . C O N F I G  
+ C : \ W I N D O W S \ M I C R O S O F T . N E T \ F R A M E W O R K \ V 2 . 0 . 5 0 7 2 7 \ C O N F I G \ S E C U R I T Y . C O N F I G . C C H  
+ C : \ W I N D O W S \ M I C R O S O F T . N E T \ F R A M E W O R K \ V 2 . 0 . 5 0 7 2 7 \ C O N F I G \ E N T E R P R I S E S E C . C O N F I G . C C H  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ C O N F I G \ S Y S T E M P R O F I L E \ A P P D A T A \ R O A M I N G \ M I C R O S O F T \ C L R   S E C U R I T Y   C O N F I G \ V 2 . 0 . 5 0 7 2 7 . 3 1 2 \ S E C U R I T Y . C O N F I G . C C H  
+ C : \ W I N D O W S \ A S S E M B L Y \ N A T I V E I M A G E S _ V 2 . 0 . 5 0 7 2 7 _ 3 2 \ M S C O R L I B \ 5 8 5 8 6 7 8 A 7 9 A A E 3 1 2 6 2 B 0 2 1 4 4 2 4 2 4 5 D 0 6 \ M S C O R L I B . N I . D L L  
+ C : \ W I N D O W S \ M I C R O S O F T . N E T \ F R A M E W O R K \ V 2 . 0 . 5 0 7 2 7 \ M S C O R J I T . D L L  
+ C : \ W I N D O W S \ A S S E M B L Y \ N A T I V E I M A G E S _ V 2 . 0 . 5 0 7 2 7 _ 3 2 \ S Y S T E M \ 2 E B B 3 C 2 5 9 E A B 5 0 A F 5 6 5 E 3 A 8 D B A 6 A D 2 0 E \ S Y S T E M . N I . D L L  
+ C : \ W I N D O W S \ A S S E M B L Y \ N A T I V E I M A G E S _ V 2 . 0 . 5 0 7 2 7 _ 3 2 \ S Y S T E M . S E R V I C E P R O C E # \ 4 9 E D 8 3 2 F A 0 9 C 7 0 2 2 5 8 B 6 E D 8 7 3 C 4 8 5 4 2 8 \ S Y S T E M . S E R V I C E P R O C E S S . N I . D L L  
+ C : \ W I N D O W S \ S Y S T E M 3 2 \ I K E E X T . D L L  
+ C : \ P R O G R A M   F I L E S \ C O M M O N   F I L E S \ M I C R O S O F T   S H A R E D \ I M E 1 4 \ S H A R E D \ I M E D I C T U P D A T E . E X E  
+ C : \ W I N D O W S \ W I N S X S \ M A N I F E S T S \ X 8 6 _ P O L I C Y . 9 . 0 . M I C R O S O F T . V C 9 0 . C R T _ 1 F C 8 B 3 B 9 A 1 E 1 8 E 3 B _ 9 . 0 . 3 0 7 2 9 . 4 9 2 6 _ N O N E _ F 4 7 C 4 7 B 2 F 6 5 8 B 4 A 8 . M A N I F E S T  
+ C : \ W I N D O W S \ W I N S X S \ M A N I F E S T S \ X 8 6 _ M I C R O S O F T . V C 9 0 . C R T _ 1 F C 8 B 3 B 9 A 1 E 1 8 E 3 B _ 9 . 0 . 3 0 7 2 9 . 4 9 2 6 _ N O N E _ 5 0 8 E D 7 3 2 B C B C 0 E 5 A . M A N I F E S T  
+ C : \ W I N D O W S \ W I N S X S \ X 8 6 _ M I C R O S O F T . V C 9 0 . C R T _ 1 F C 8 B 3 B 9 A 1 E 1 8 E 3 B _ 9 . 0 . 3 0 7 2 9 . 4 9 2 6 _ N O N E _ 5 0 8 E D 7 3 2 B C B C 0 E 5 A \ M S V C R 9 0 . D L L  
+ C : \ W I N D O W S \ W I N S X S \ X 8 6 _ M I C R O S O F T . V C 9 0 . C R T _ 1 F C 8 B 3 B 9 A 1 E 1 8 E 3 B _ 9 . 0 . 3 0 7 2 9 . 4 9 2 6 _ N O N E _ 5 0 8 E D 7 3 2 B C B C 0 E 5 A \ M S V C P 9 0 . D L L  
+ C : \ P R O G R A M   F I L E S \ M I C R O S O F T   S Q L   S E R V E R \ 1 0 0 \ D T S \ B I N N \ M S D T S S R V R . E X E  
+ C : \ W I N D O W S \ A S S E M B L Y \ N A T I V E I M A G E S _ V 2 . 0 . 5 0 7 2 7 _ 3 2 \ S Y S T E M . C O N F I G U R A T I O N \ C B 0 7 9 E A B 1 3 4 F D 1 A 7 5 2 A D 9 1 D B 1 3 2 7 4 1 1 0 \ S Y S T E M . C O N F I G U R A T I O N . N I . D L L  
+ C : \ P R O G R A M   F I L E S \ M I C R O S O F T   S Q L   S E R V E R \ 1 0 0 \ D T S \ B I N N \ M S D T S S R V R . E X E . C O N F I G  
+ C : \ W I N D O W S \ A S S E M B L Y \ N A T I V E I M A G E S _ V 2 . 0 . 5 0 7 2 7 _ 3 2 \ S Y S T E M . X M L \ 5 C 8 5 C 9 C 4 2 E 1 B 8 A 8 7 6 0 D E

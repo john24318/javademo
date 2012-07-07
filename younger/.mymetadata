@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="younger"
+  id="myeclipse.1258950188921"
+  context-root="/younger"
+  j2ee-spec="1.4"
+  archive="younger.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

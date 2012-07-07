@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="jbpm.install">
+  
+  <!-- DEVELOPER SPECIFIC CONFIGURATIONS -->
+  <property file="${user.home}/.jbpm4/build.properties" />
+
+  <!-- USER CUSTOMIZABLE PROPERTIES -->
+  <property name="database" value="hsqldb" /> <!-- {hsqldb | mysql | oracle | postgresql} -->
+  <echo message="database......... ${database}" />
+  <property name="tx" value="standalone" /> <!-- {standalone | jta | spring} -->
+  <echo message="tx............... ${tx}" />
+  <property name="mail.smtp.host" value="localhost" />
+  <echo message="mail.smtp.host... ${mail.smtp.host}" />
+
+  <!-- INTERNAL PROPERTY DEFAULTS -->
+  <property name="jbpm.version" value="4.2" />
+  <property name="jbpm.parent.dir" value="../.." />
+  <property name="jbpm.home" value="${jbpm.parent.dir}/jbpm-${jbpm.version}" />
+  <property name="hibernate.connection.type" value="jdbc" /> <!-- jdbc | datasource -->
+  <property name="logging" value="jdk" /> <!-- jdk | none -->
+  <property name="cfg.dest.dir" value="${jbpm.home}/install/generated/cfg" />
+  <property name="install.src.dir" value="${jbpm.home}/install/src" />
+  <property name="mail.cfg" value="default" />
+
+  <property name="jdbc.properties.dir" value="${jbpm.home}/install/jdbc" />
+  <property file="${jdbc.properties.dir}/${database}.properties" />
+  
+  <property name="examples.file" value="${jbpm.home}/examples/target/examples.jar"/>
+  
+  <property name="tomcat.version" value="6.0.20" />
+  <property name="tomcat.parent.dir" value="${jbpm.home}" />
+  <property name="tomcat.home" value="${tomcat.parent.dir}/apache-tomcat-${tomcat.version}" />
+  <property name="tomcat.filename" value="apache-tomcat-${tomcat.version}.zip" />
+  <property name="tomcat.distro.dir" value="downloads" />
+  <property name="tomcat.distro.url" value="http://www.apache.org/dist/tomcat/tomcat-6/v${tomcat.version}/bin/${tomcat.filename}" />
+  <property name="tomcat.distro.path" value="${tomcat.distro.dir}/${tomcat.filename}" />
+  <property name="tomcat.lib.dir" value="${tomcat.home}/lib" />
+  <property name="tomcat.webapps.dir" value="${tomcat.home}/webapps" />
+  
+  <property name="hsqldb.server.install.dir" value="${jbpm.home}/hsqldb-server"/>
+  <property name="hsqldb.server.source.dir" value="${jbpm.home}/install/src/hsqldb-server" />
+
+  <property name="jboss.version" value="5.0.0.GA" />
+  <property name="jboss.parent.dir" value="${jbpm.home}" />
+  <property name="jboss.home" value="${jboss.parent.dir}/jboss-${jboss.version}" />
+  <property name="jboss.filename" value="jboss-${jboss.version}.zip" />
+  <property name="jboss.distro.dir" value="downloads" />
+  <property name="jboss.distro.url" value="http://downloads.sourceforge.net/jboss/${jboss.filename}" />
+  <property name="jboss.distro.path" value="${jboss.distro.dir}/${jboss.filename}" />
+  <property name="jboss.server.configuration" value="default" />
+  <property name="jboss.server.config.dir" value="${jboss.home}/server/${jboss.server.configuration}" />
+  <property name="jboss.server.data.dir" value="${jboss.home}/server/${jboss.server.configuration}/data" />
+  <property name="jboss.server.deploy.dir" value="${jboss.home}/server/${jboss.server.configuration}/deploy" />
+
+  <property name="signavio.war.file.name" value="jbpmeditor.war" />
+  <property name="signavio.src.dir" value="${jbpm.home}/install/src/signavio" />
+	<property name="signavio.tmp.dir" value="${jbpm.home}/install/generated/signavio-war" />
+  <property name="signavio.repo.dir.name" value="signavio-repository" />
+  
+   <!-- GENERAL CONDITIONS -->
+  <condition property="is.jboss.distro.available">
+    <available file="${jboss.distro.path}" />
+  </condition>
+  <condition property="is.tomcat.distro.available">
+    <available file="${tomcat.distro.path}" />
+  </condition>
+  <condition property="is.linux.unix.or.mac">
+    <or>
+      <os family="unix" />
+      <os family="mac" />
+      <os name="sunos" />
+    </or>
+  </condition>
+  <condition property="hsqldb.needed">
+     <equals arg1="${database}" arg2="hsqldb" />
+   </condition>
+  
+  <!-- OS CONDITIONS -->
+  <condition property="isWindows">
+    <os family="windows"/>
+  </condition>
+  <condition property="isNotWindows">
+    <not>
+      <isset property="isWindows" />
+    </not>
+  </condition>
+
+  <condition property="is.jboss.500">
+    <equals arg1="${jboss.version}" arg2="5.0.0.GA"/>
+  </condition>
+
+  <condition property="is.jboss.510">
+    <equals arg1="${jboss.version}" arg2="5.1.0.GA"/>
+  </condition>
+
+  <!-- ECLIPSE RELATED CONDITIONS -->
+  <condition property="eclipse.filename" value="eclipse-jee-galileo-win32.zip">
+    <contains string="${os.name}" casesensitive="false" substring="win" />
+  </condition>
+  <condition property="eclipse.tarfilename" value="eclipse-jee-galileo-macosx-carbon.tar">
+    <contains string="${os.name}" casesensitive="false" substring="mac" />
+  </condition>
+  <condition property="eclipse.filename" value="${eclipse.tarfilename}.gz">
+    <contains string="${os.name}" casesensitive="false" substring="mac" />
+  </condition>
+  <condition property="eclipse.tarfilename" value="eclipse-jee-galileo-linux-gtk.tar">
+    <and>
+      <contains string="${os.name}" casesensitive="false" substring="linux" />
+      <not>
+        <contains string="${os.arch}" casesensitive="false" substring="64" />
+      </not>
+    </and>
+  </condition>
+  <condition property="eclipse.filename" value="${eclipse.tarfilename}.gz">
+    <and>
+      <contains string="${os.name}" casesensitive="false" substring="linux" />
+      <not>
+        <contains string="${os.arch}" casesensitive="false" substring="64" />
+      </not>
+    </and>
+  </condition>
+  <condition property="eclipse.tarfilename" value="eclipse-jee-galileo-linux-gtk-x86_64.tar">
+    <and>
+    <contains string="${os.name}" casesensitive="false" substring="linux" />
+      <contains string="${os.arch}" casesensitive="false" substring="64" />
+    </and>
+  </condition>
+  <condition property="eclipse.filename" value="${eclipse.tarfilename}.gz">
+    <and>
+      <contains string="${os.name}" casesensitive="false" substring="linux" />
+      <contains string="${os.arch}" casesensitive="false" substring="64" />
+    </and>
+  </condition>
+  <property name="eclipse.distro.url" value="http://mirror.cc.vt.edu/pub/eclipse/technology/epp/downloads/release/galileo/R/${eclipse.filename}" />
+  <property name="eclipse.distro.dir"  value="downloads" />
+  <property name="eclipse.parent.dir" value="${jbpm.home}" />
+  <property name="eclipse.distro.path" value="${eclipse.distro.dir}/${eclipse.filename}" />
+
+  <!-- ### DEMO SETUP JBOSS ##################################################### -->
+  <target name="demo.setup.jboss" 
+          depends="install.jboss, install.jbpm.into.jboss" 
+          description="installs jboss, installs jbpm into jboss, starts jboss, creates the jBPM DB schema, deploys examples, loads example identities, installs and starts eclipse">
+    <antcall target="internal.enable.jboss.debug.jboss500" />
+    <antcall target="internal.enable.jboss.debug.jboss510" />
+    <antcall target="internal.install.and.start.hsqldb.if.needed" />
+    <antcall target="create.jbpm.schema" />
+    <antcall target="start.jboss" />
+    <antcall target="install.examples.into.jboss" />
+    <antcall target="load.example.identities" />
+    <antcall target="install.eclipse" />
+    <antcall target="start.eclipse" />
+  </target>
+
+  <!-- ### DEMO TEARDOWN JBOSS ##################################################### -->
+  <target name="demo.teardown.jboss" 
+          description="drops the jbpm db schema and stops jboss">
+    <ant antfile="${jbpm.home}/db/build.xml" target="drop.jbpm.schema" />
+    <antcall target="stop.jboss" />
+  </target>
+  
+  <!-- ### CLEAN CONFIGURATION DIR ########################################### -->
+  <target name="clean.cfg.dir" description="Deletes the ${cfg.dest.dir}">
+    <delete dir="${cfg.dest.dir}" />
+  </target>
+    
+  <!-- ### CREATE CONFIGURATION ########################################### -->
+  <target name="create.cfg" description="Creates a configuration in ${cfg.dest.dir}">
+    <mkdir dir="${cfg.dest.dir}" />
+    <copy tofile="${cfg.dest.dir}/jbpm.cfg.xml" 
+          file="${install.src.dir}/cfg/jbpm/${tx}.jbpm.cfg.xml"
+          overwrite="true" />
+    <copy tofile="${cfg.dest.dir}/jbpm.hibernate.cfg.xml" 
+          file="${install.src.dir}/cfg/hibernate/${hibernate.connection.type}/${database}.hibernate.cfg.xml"
+          overwrite="true">
+      <filterset filtersfile="${jdbc.properties.dir}/${database}.properties" />
+    </copy>
+    <copy todir="${cfg.dest.dir}"
+          overwrite="true">
+      <fileset dir="${install.src.dir}/cfg/logging/${logging}" />
+    </copy>
+    <copy tofile="${cfg.dest.dir}/jbpm.mail.properties" 
+          file="${install.src.dir}/cfg/mail/jbpm.mail.${mail.cfg}.properties" 
+          overwrite="true">
+      <filterset>
+        <filter token="mail.smtp.host" value="${mail.smtp.host}" />
+      </filterset>
+    </copy>
+  </target>
+
+  <!-- ### CREATE USER WEBAPP ########################################## -->
+  <target name="create.user.webapp"
+          depends="create.cfg"
+          description="Generates a configuration in dir /install/generated/user-webapp">
+    <delete dir="${jbpm.home}/install/generated/user-webapp" />
+    <mkdir dir="${jbpm.home}/install/generated/user-webapp/WEB-INF/classes" />
+    <mkdir dir="${jbpm.home}/install/generated/user-webapp/WEB-INF/lib" />
+    <copy todir="${jbpm.home}/install/generated/user-webapp">
+      <fileset dir="${install.src.dir}/user-webapp"/>
+    </copy>
+    <copy todir="${jbpm.home}/install/generated/user-webapp/WEB-INF/classes">
+      <fileset dir="${cfg.dest.dir}">
+        <exclude name="logging.properties" />
+      </fileset>
+    </copy>
+    <copy todir="${jbpm.home}/install/generated/user-webapp/WEB-INF/lib">
+      <fileset dir="${jbpm.home}">
+        <include name="jbpm.jar" />
+      </fileset>
+      <fileset dir="${jbpm.home}/lib">
+        <include name="activation.jar" />
+        <include name="antlr.jar" />
+        <include name="commons-collections.jar" />
+        <include name="dom4j.jar" />
+        <include name="freemarker.jar" />
+        <include name="hibernate-core.jar" />
+        <include name="hibernate-cglib-repack.jar" />
+        <include name="javassist.jar" />
+        <include name="jta.jar" />
+        <include name="juel*.jar" />
+        <include name="livetribe-jsr223.jar" />
+        <include name="mail.jar" />
+        <include name="slf4j-api.jar" />
+        <include name="slf4j-jdk14.jar" />
+      </fileset>
+    </copy>
+    
+    <!-- copy database driver -->
+    <property name="database.driver.destination.dir" value="${jbpm.home}/install/generated/user-webapp/WEB-INF/lib" />
+    <property name="is.tomcat" value="true" />
+    <antcall target="internal.copy.database.driver" />
+  </target>
+
+  <!-- ### REINSTALL JBOSS ################################################ -->
+  <target name="reinstall.jboss" 
+          depends="delete.jboss, install.jboss" 
+          description="Deletes the previous jboss installation and re-installs jboss" />
+
+  <target name="reinstall.jboss.and.jbpm" 
+          depends="delete.jboss, install.jboss, install.jbpm.into.jboss" 
+          description="Deletes the previous jboss installation and re-installs jboss and installs jbpm in it" />
+
+  <!-- ### DELETE JBOSS ################################################### -->
+  <target name="delete.jboss" 
+          description="Deletes jboss installation">
+    <delete dir="${jboss.home}" />
+  </target>
+
+  <!-- ### INSTALL JBOSS ################################################## -->
+  <target name="install.jboss" 
+          depends="get.jboss"
+          description="Downloads jboss to ${jboss.distro.dir} if its not available and then unzips jboss">
+    <unzip src="${jboss.distro.path}" dest="${jboss.parent.dir}" />
+    <chmod perm="a+x" file="${jboss.home}/bin/run.sh" os="Linux, Mac OS X" />
+    <chmod perm="a+x" file="${jboss.home}/bin/shutdown.sh" os="Linux, Mac OS X" />
+  </target>
+  
+  <!-- ### GET JBOSS ###################################################### -->
+  <target name="get.jboss" 
+          unless="is.jboss.distro.available"
+          description="Downloads jboss into ${jboss.distro.dir}">
+    <mkdir dir="${jboss.distro.dir}" />
+    <get src="${jboss.distro.url}" dest="${jboss.distro.path}" />
+  </target>
+  
+  <!-- ### INSTALL JBPM INTO JBOSS ######################### -->
+  <target name="install.jbpm.into.jboss" 
+          description="Installs jBPM into JBoss">
+    <!-- copy static configuration files -->
+    <copy todir="${jboss.server.config.dir}" overwrite="true">
+       <fileset dir="${jbpm.home}/install/src/jboss/config" />
+    </copy>
+
+    <!-- copy the right hibernate configuration file -->
+    <copy file="${jbpm.home}/install/src/cfg/hibernate/datasource/${database}.hibernate.cfg.xml"
+          tofile="${jboss.server.config.dir}/deploy/jbpm/jbpm-service.sar/jbpm.hibernate.cfg.xml"
+          overwrite="true" />
+
+    <!-- copy the right datasource configuration file and replace the jdbc properties with 
+         the values in the jdbc/${database}.properties file -->
+    <copy todir="${jboss.server.config.dir}/deploy/jbpm" overwrite="true">
+      <filterset filtersfile="${jdbc.properties.dir}/${database}.properties" />
+      <fileset dir="${jbpm.home}/install/src/jboss/datasources">
+        <include name="jbpm-${database}-ds.xml"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${jboss.server.config.dir}/lib" overwrite="true">
+      <fileset dir="${jbpm.home}">
+        <include name="jbpm.jar" />
+      </fileset>
+      <fileset dir="${jbpm.home}/lib">
+        <include name="gwt-console-server-integration.jar" />
+        <include name="gwt-console-rpc.jar" />
+        <include name="jbpm-jboss.jar" />
+      </fileset>
+    </copy>
+    
+    <copy todir="${jboss.server.config.dir}/deploy/jbpm" overwrite="true">
+      <fileset dir="${jbpm.home}/lib">
+        <include name="gwt-console-jbpm.war" />
+        <include name="gwt-console-server-jbpm.war" />
+      </fileset>
+    </copy>
+    
+    <copy todir="${jboss.server.config.dir}/deploy/jbpm/jbpm-service.sar" overwrite="true">
+      <fileset dir="${jbpm.home}/lib">
+        <include name="jbpm-console-integration.jar" />
+        <include name="jbpm-console-form-plugin.jar" />
+        <include name="jbpm-console-graphView-plugin.jar"/>
+        <include name="freemarker.jar" />
+        <include name="livetribe-jsr223.jar" />
+        <include name="juel*.jar" />
+      </fileset>
+    </copy>
+
+    <mkdir dir="${jboss.home}/docs/examples/jbpm" />
+    <copy todir="${jboss.home}/docs/examples/jbpm" overwrite="true">
+      <fileset dir="${jbpm.home}/install/src/jboss/datasources" />
+    </copy>
+
+    <!-- reporting -->
+    <property name="birt.dir" value="${jboss.server.data.dir}/birt"/>
+    <mkdir dir="${birt.dir}"/>
+    <unzip src="${jbpm.home}/lib/report-engine.zip" dest="${birt.dir}"/>
+    <unzip src="${jbpm.home}/lib/jbpm-console-reports.jar" dest="${birt.dir}"/>
+
+    <property name="container.lib.dir" value="${jboss.server.config.dir}/deploy/jbpm/jbpm-service.sar" />
+    <antcall target="internal.copy.database.driver" />
+  	
+  	<!-- Signavio -->
+  	<antcall target="install.signavio.into.jboss" />
+  </target>
+  
+  <!-- ### INSTALL EXAMPLES INTO JBOSS ################################################ -->  
+  <target name="install.examples.into.jboss">
+      <ant antfile="${jbpm.home}/examples/build.xml" target="create.and.deploy.examples" />
+      <mkdir dir="${jboss.server.config.dir}/deploy/jbpm/userlibs" />
+      <copy file="${examples.file}"
+            todir="${jboss.server.config.dir}/deploy/jbpm/userlibs" 
+            overwrite="true" />
+  </target>
+
+  <!-- ### START JBOSS ################################################### -->
+  <target name="start.jboss" 
+          description="starts jboss and waits till jboss is booted, then lets jboss run in the background">
+    <taskdef name="start-jboss"
+             classname="org.jbpm.pvm.internal.ant.StartJBossTask">
+      <classpath>
+        <fileset dir="${jbpm.home}">
+          <include name="jbpm.jar" />
+        </fileset>
+      </classpath>
+    </taskdef>
+    <start-jboss jbosshome="${jboss.home}" />
+  </target>
+
+  <!-- ### STOP JBOSS ################################################### -->
+  <target name="stop.jboss" 
+          description="signals jboss to stop, but doesn't wait till its finished">
+    <exec executable="${jboss.home}/bin/shutdown.bat" os="Windows Vista, Windows XP,Windows 2000,Windows 98">
+      <arg line="-S"/>
+    </exec>
+    <exec executable="${jboss.home}/bin/shutdown.sh" os="Linux, Unix, Mac">
+      <arg line="-S"/>
+    </exec>
+  </target>
+  
+   <!-- ### DEMO SETUP TOMCAT ################################################ -->  
+  <target name="demo.setup.tomcat" 
+          depends="delete.tomcat, install.tomcat, install.jbpm.into.tomcat"
+          description="installs tomcat, installs jbpm into tomcat, starts tomcat, creates the jBPM DB schema, deploys examples, loads example identities, installs and starts eclipse">
+        <antcall target="internal.install.and.start.hsqldb.if.needed" />
+        <antcall target="create.jbpm.schema" /> 
+        <antcall target="install.examples.into.tomcat" />
+        <antcall target="load.example.identities" />
+        <antcall target="start.tomcat" />
+        <antcall target="install.eclipse" />
+        <antcall target="start.eclipse" />
+    </target>
+
+  <!-- ### DEMO TEARDOWN TOMCAT ################################################ -->  
+  <target name="demo.teardown.tomcat" 
+          depends="stop.tomcat, internal.stop.hsqldb.server.if.needed"
+          description="stops tomcat and then the hsqldb server if needed">
+  </target>
+
+  <!-- ### REINSTALL TOMCAT ################################################ -->
+  <target name="reinstall.tomcat" 
+          depends="delete.tomcat, install.tomcat" 
+          description="Deletes the previous tomcat installation and re-installs tomcat" />
+
+  <target name="reinstall.tomcat.and.jbpm" 
+          depends="delete.tomcat, install.tomcat, install.jbpm.into.tomcat" 
+          description="Deletes the previous tomcat installation and re-installs tomcat and installs jbpm in it" />
+
+  <!-- ### DELETE TOMCAT ################################################### -->
+  <target name="delete.tomcat" 
+          description="Deletes tomcat installation">
+    <delete dir="${tomcat.home}" />
+  </target>
+
+  <!-- ### INSTALL TOMCAT ################################################## -->
+  <target name="install.tomcat" 
+          depends="get.tomcat"
+          description="Downloads tomcat to ${tomcat.distro.dir} if its not available and then unzips tomcat">
+    <unzip src="${tomcat.distro.path}" dest="${tomcat.parent.dir}" />
+    <antcall target="install.tomcat.linuxandmac" />
+  </target>
+
+  <target name="install.tomcat.linuxandmac" if="is.linux.unix.or.mac">
+    <chmod perm="a+x" os="Linux, Mac OS X">
+      <fileset dir="${tomcat.home}/bin">
+        <include name="*.sh" />
+      </fileset>
+    </chmod>
+  </target>
+  
+  <!-- ### GET TOMCAT ###################################################### -->
+  <target name="get.tomcat" 
+          unless="is.tomcat.distro.available"
+          description="Downloads tomcat into ${tomcat.distro.dir} if it is not available">
+    <mkdir dir="${tomcat.distro.dir}" />
+    <get src="${tomcat.distro.url}" dest="${tomcat.distro.path}" />
+  </target>
+
+  <!-- ### INSTALL JBPM INTO TOMCAT ####################################### -->
+  <target name="install.jbpm.into.tomcat"
+        depends="create.cfg"
+        description="Installs jBPM into tomcat">
+    
+    <property name="is.tomcat" value="true" />
+
+    <!-- create the jbpm configuration jar file and drop in /lib -->
+    <jar destfile="${tomcat.home}/lib/jbpm.cfg.jar">
+      <fileset dir="${jbpm.home}/install/generated/cfg">
+        <exclude name="logging.properties"/>
+      </fileset>
+    </jar>
+
+    <!-- Copy jBPM third party libs into /lib -->
+    <copy todir="${tomcat.home}/lib" overwrite="true">
+      <fileset dir="${jbpm.home}">
+        <include name="jbpm.jar" />
+      </fileset>
+      <fileset dir="${jbpm.home}/lib">
+        <include name="activation.jar" />
+        <include name="antlr.jar" />
+        <include name="commons-collections.jar" />
+        <include name="commons-logging.jar" />
+        <include name="dom4j.jar" />
+        <include name="freemarker.jar" />
+        <include name="hibernate-core.jar" />
+        <include name="hibernate-cglib-repack.jar" />
+        <include name="javassist.jar" />
+        <include name="jbpm-spi.jar" />
+        <include name="jbpm-tomcat6.jar" />
+        <include name="jta.jar" />
+        <include name="juel*.jar" />
+        <include name="livetribe-jsr223.jar" />
+        <include name="log4j.jar" />
+        <include name="mail.jar" />
+        <include name="slf4j-api.jar" />
+        <include name="slf4j-jdk14.jar" />
+        <include name="gwt-console-server-integration.jar" />
+        <include name="gwt-console-rpc.jar" />
+        <include name="jbpm-console-integration.jar" />
+        <include name="jbpm-console-form-plugin.jar" />
+        <include name="jbpm-console-graphView-plugin.jar"/>
+      </fileset>
+    </copy>
+
+    <!-- Copy jbpm-console wars into /webapps -->
+    <copy todir="${tomcat.home}/webapps" overwrite="true">
+      <fileset dir="${jbpm.home}/lib">
+        <include name="gwt-console-jbpm.war" />
+        <include name="gwt-console-server-jbpm.war" />
+      </fileset>
+    </copy>
+    
+    <!-- Copy Signavio war into /webapps -->
+    <antcall target="install.signavio.into.tomcat" />
+    
+    
+    <!-- Rename wars (the context root is configured by WEB-INF/jboss-web.xml,
+        which is neglected by Tomcat -->
+    <move file="${tomcat.home}/webapps/gwt-console-jbpm.war" tofile="${tomcat.home}/webapps/jbpm-console.war" />
+    <move file="${tomcat.home}/webapps/gwt-console-server-jbpm.war" tofile="${tomcat.home}/webapps/gwt-console-server.war" />
+    
+    <!-- reporting -->
+    <property name="birt.dir" value="${tomcat.home}/birt"/>
+    <mkdir dir="${birt.dir}"/>
+    <unzip src="${jbpm.home}/lib/report-engine.zip" dest="${birt.dir}"/>
+    <unzip src="${jbpm.home}/lib/jbpm-console-reports.jar" dest="${birt.dir}"/>
+
+    <!-- copy database driver -->
+    <property name="database.driver.destination.dir" value="${tomcat.home}/lib" />
+    <antcall target="internal.copy.database.driver" />
+  	
+    <!-- tweak the tomcat server config for the security domain -->
+    <copy file="${install.src.dir}/tomcat/server.xml"
+          tofile="${tomcat.home}/conf/server.xml" 
+          overwrite="true">
+          <filterset filtersfile="${jdbc.properties.dir}/${database}.properties" />
+    </copy>
+  </target>
+  
+  <!-- ### INSTALL EXAMPLES INTO TOMCAT ################################################ -->  
+  <target name="install.examples.into.tomcat"
+            description="deploys all the example processes">
+    <ant antfile="${jbpm.home}/examples/build.xml" target="create.and.deploy.examples" />
+    <copy file="${examples.file}"
+          todir="${tomcat.home}/lib" 
+          overwrite="true" />
+  </target>
+  
+  <!-- ### INSTALL HSQLDB SERVER ################################################ -->  
+  <target name="install.hsqldb.server">
+    <delete dir="${hsqldb.server.install.dir}" /> <!-- Also deletes old data --> 
+    <mkdir dir="${hsqldb.server.install.dir}"/>
+    <copy file="${jbpm.home}/lib/hsqldb.jar" todir="${hsqldb.server.install.dir}" />
+    <copy todir="${hsqldb.server.install.dir}">
+      <fileset dir="${hsqldb.server.source.dir}" />
+    </copy>
+    <chmod perm="a+x" os="Linux, Mac OS X">
+      <fileset dir="${hsqldb.server.install.dir}">
+        <include name="*.sh"/>
+      </fileset>
+    </chmod>
+  </target>
+  
+  <!-- ### START HSQLDB SERVER ################################################ -->
+  <target name="start.hsqldb.server" >
+    <taskdef name="start-hsqldb-server" classname="org.jbpm.pvm.internal.ant.StartHsqldbServerTask">
+      <classpath>
+        <fileset dir="${jbpm.home}">
+          <include name="jbpm.jar"/>
+        </fileset>
+      </classpath>
+    </taskdef>
+    <start-hsqldb-server hsqldbServerHome="${hsqldb.server.install.dir}" />
+  </target>
+  
+  <!-- ### SHUTDOWN HSQLDB SERVER ################################################ -->
+  <target name="stop.hsqldb.server">
+    <sql driver="${jdbc.driver}" 
+       password="${jdbc.password}" 
+       url="${jdbc.url}" 
+       userid="${jdbc.username}" 
+       autocommit="true"
+       src="${hsqldb.server.install.dir}/shutdown.sql">
+      <classpath>
+        <fileset dir="${hsqldb.server.install.dir}">
+          <include name="hsqldb.jar"/>
+        </fileset>
+      </classpath>
+    </sql>
+  </target>
+  
+  <!-- ### START TOMCAT ################################################### -->
+  <target name="start.tomcat" 
+          description="Starts Tomcat and waits till it is booted, then lets Tomcat run in the background">
+    <taskdef name="start-tomcat" classname="org.jbpm.pvm.internal.ant.StartTomcatTask">
+      <classpath>
+        <fileset dir="${jbpm.home}">
+          <include name="jbpm.jar" />
+        </fileset>
+      </classpath>
+    </taskdef>
+    <start-tomcat tomcathome="${tomcat.home}" />
+  </target>
+
+  <!-- ### STOP TOMCAT ################################################### -->
+  <target name="stop.tomcat" 
+          description="Signals Tomcat to stop, but doesn't wait till its finished">
+    <exec executable="${tomcat.home}/bin/catalina.bat"
+          dir="${tomcat.home}/bin"
+          os="Windows Vista, Windows XP,Windows 2000,Windows 98">
+      <arg line="stop"/>
+    </exec>
+    <exec executable="${tomcat.home}/bin/catalina.sh" 
+          dir="${tomcat.home}/bin"
+          os="Linux, Unix, Mac">
+      <arg line="stop"/>
+    </exec>
+  </target>
+  
+  <!-- ### CREATE JBPM SCHEMA ############################################# -->
+  <target name="create.jbpm.schema" 
+          depends="create.cfg"
+          description="creates the jbpm tables in the database">
+    <echo message="creating jbpm schema..." />
+    <copy tofile="${cfg.dest.dir}/jbpm.cfg.xml" 
+          file="${install.src.dir}/cfg/jbpm/standalone.testsuite.jbpm.cfg.xml"
+          overwrite="true" />
+    <java classname="org.jbpm.db.Create" fork="true">
+      <arg line="${database}" />
+      <classpath>
+        <pathelement location="${jbpm.home}/install/generated/cfg" />
+        <pathelement location="${jbpm.home}/install/src/db" />
+        <fileset dir="${jbpm.home}">
+          <include name="jbpm.jar"/>
+        </fileset>
+        <fileset dir="${jbpm.home}/lib">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
+    </java>
+  </target>
+
+  <!-- ### UPGRADE JBPM SCHEMA ############################################# -->
+  <target name="upgrade.jbpm.schema"
+  	      depends="create.cfg"
+          description="Upgrades the jBPM tables in the database to the current version">
+    <echo message="upgrading jbpm schema..." />
+    <copy tofile="${cfg.dest.dir}/jbpm.cfg.xml" 
+          file="${install.src.dir}/cfg/jbpm/standalone.testsuite.jbpm.cfg.xml"
+          overwrite="true" />
+    <java classname="org.jbpm.db.Upgrade" fork="true">
+    	<arg line="${database}" />
+      <classpath>
+      	<pathelement location="${jbpm.home}/install/generated/cfg" />
+        <pathelement location="${jbpm.home}/install/src/db" />
+        <fileset dir="${jbpm.home}">
+          <include name="jbpm.jar"/>
+        </fileset>
+        <fileset dir="${jbpm.home}/lib">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
+    </java>
+  </target>
+
+  <!-- ### DROP JBPM SCHEMA ############################################### -->
+  <target name="drop.jbpm.schema" 
+          description="drops the jbpm tables from the database">
+    <echo message="dropping jbpm schema in db ${jdbc.url}" />
+    <sql driver="${jdbc.driver}"
+         url="${jdbc.url}"
+         userid="${jdbc.username}"
+         password="${jdbc.password}"
+         onerror="continue"
+         src="${jbpm.home}/install/src/db/drop/jbpm.${database}.drop.sql">
+      <classpath>
+        <fileset dir="${jbpm.home}/lib">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
+    </sql>
+  </target>
+
+  <!-- ### LOAD EXAMPLE IDENTITIES ######################################## -->
+  <target name="load.example.identities"
+          description="loads the example users and groups into the database">
+    <echo message="loading example identities in ${jdbc.url}" />
+    <sql driver="${jdbc.driver}"
+         url="${jdbc.url}"
+         userid="${jdbc.username}"
+         password="${jdbc.password}"
+         onerror="continue">
+      <transaction src="${jbpm.home}/install/src/demo/example.identities.sql"/>
+      <classpath>
+        <fileset dir="${jbpm.home}/lib">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
+    </sql>
+  </target>
+  
+  <!-- ### START HSQLDB DATABASE MGR ##################################### -->
+  <target name="hsqldb.databasemanager"
+          description="start the hsqldb database manager">
+    <java classname="org.hsqldb.util.DatabaseManager" fork="true">
+      <arg line="-url jdbc:hsqldb:hsql://localhost:1701"/>
+      <classpath>
+        <fileset dir="${jbpm.home}/lib">
+          <include name="hsqldb.jar"/>
+        </fileset>
+      </classpath>
+    </java>
+  </target>
+
+  <!-- ### INSTALL ECLIPSE ################################################ -->
+  <target name="install.eclipse" 
+          depends="get.eclipse"
+          description="unzips eclipse, downloads eclipse if it is not available in ${eclipse.distro.dir}">
+    <antcall target="internal.install.eclipse.windows" />
+    <antcall target="internal.install.eclipse.non.windows" />
+  </target>
+  
+  <!-- ### GET ECLIPSE ##################################################### -->
+  <condition property="is.eclipse.distro.available">
+    <available file="${eclipse.distro.path}" />
+  </condition>
+  <target name="get.eclipse" 
+          unless="is.eclipse.distro.available"
+          description="downloads eclipse to ${eclipse.distro.dir}">
+    <mkdir dir="${eclipse.distro.dir}" />
+    <get src="${eclipse.distro.url}" dest="${eclipse.distro.path}" />
+  </target>
+
+  <!-- ### START ECLIPSE ################################################## -->
+  <target name="start.eclipse"
+          description="starts eclipse">
+    <!-- Windows -->
+    <exec executable="cmd" os="Windows Vista, Windows XP,Windows 2000,Windows 98">
+      <arg line="/C start &quot;${jbpm.home}/eclipse/eclipse.exe&quot; &quot;-data&quot; &quot;${jbpm.home}/workspace&quot;" />
+    </exec>
+    <!-- Unix -->
+    <chmod perm="+x">
+      <fileset dir="${jbpm.home}/eclipse">
+        <filename name="eclipse"/>
+      </fileset>
+    </chmod>
+    <exec executable="/bin/bash" os="Linux,Mac OS X">
+      <arg line="-c &quot;${jbpm.home}/eclipse/eclipse&quot; &quot;-data&quot; &quot;${jbpm.home}/workspace&quot;" />
+    </exec>
+  </target>
+
+  <target name="install.signavio.into.jboss" depends="internal.set.signavio.repo.dir" description="installs signavio into jboss">
+    <!-- Current version of Signavio needs to be unpacked in /deploy to work correctly -->
+    <unzip src="${signavio.src.dir}/${signavio.war.file.name}" dest="${jboss.server.deploy.dir}/${signavio.war.file.name}" />
+  </target>
+
+  <target name="install.signavio.into.tomcat" depends="internal.set.signavio.repo.dir" description="installs signavio into tomcat">
+    <copy file="${signavio.src.dir}/${signavio.war.file.name}" todir="${tomcat.webapps.dir}"/>
+  </target>
+	
+  <!-- ######################## -->
+  <!-- ### INTERNAL TARGETS ### -->
+  <!-- ######################## -->
+
+  <target name="internal.install.and.start.hsqldb.if.needed" if="hsqldb.needed">
+    <antcall target="install.hsqldb.server" />
+    <antcall target="start.hsqldb.server" />
+  </target>
+    
+  <target name="internal.stop.hsqldb.server.if.needed" if="hsqldb.needed">
+    <antcall target="stop.hsqldb.server" />
+  </target>
+    
+  <target name="internal.enable.jboss.debug.jboss500" if="is.jboss.500">
+    <echo message="enabling debug on ${jboss.home}" />
+    <replace file="${jboss.home}/bin/run.bat" 
+             token="rem set JAVA_OPTS=%JAVA_OPTS% -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y"
+             value="set JAVA_OPTS=%JAVA_OPTS% -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n" />
+    <echo message="copying customized log file to ${jboss.server.config.dir}/conf" />
+    <copy file="${jbpm.home}/install/src/jboss/log/jboss-log4j.xml" todir="${jboss.server.config.dir}/conf" overwrite="true" />
+  </target>
+
+  <target name="internal.enable.jboss.debug.jboss510"  if="is.jboss.510">
+    <echo message="enabling debug on ${jboss.home}" />
+    <replace file="${jboss.home}/bin/run.conf.bat" 
+             token="rem set &quot;JAVA_OPTS=%JAVA_OPTS% -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n&quot;"
+             value="set &quot;JAVA_OPTS=%JAVA_OPTS% -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n&quot;"/>
+    <echo message="copying customized log file to ${jboss.server.config.dir}/conf" />
+    <copy file="${jbpm.home}/install/src/jboss/log/jboss-log4j.xml" todir="${jboss.server.config.dir}/conf" overwrite="true" />
+  </target>
+
+  <target name="internal.copy.database.driver">
+    <condition property="database.driver" value="mysql-connector-java.jar">
+      <equals arg1="${database}" arg2="mysql" />
+    </condition>
+    <condition property="database.driver" value="ojdbc14.jar">
+      <equals arg1="${database}" arg2="oracle" />
+    </condition>
+    <condition property="database.driver" value="mysql-connector-java.jar">
+      <equals arg1="${database}" arg2="mysql" />
+    </condition>
+    <condition property="database.driver" value="postgresql.jar">
+      <equals arg1="${database}" arg2="postgresql" />
+    </condition>
+    <condition property="database.driver" value="hsqldb.jar">
+      <and>
+        <equals arg1="${database}" arg2="hsqldb" />
+        <equals arg1="${is.tomcat}" arg2="true" />
+      </and>
+    </condition>
+    <antcall target="internal.copy.database.driver.if.needed" />
+  </target>
+  
+  <target name="internal.copy.database.driver.if.needed" if="database.driver">
+    <available file="${jbpm.home}/lib/${database.driver}" property="database.driver.jar.available" />
+    <fail message="please download the ${database} driver jar and put it in the ${jbpm.home}/lib directory" unless="database.driver.jar.available" />
+    <echo message="Copying database driver ${database.driver} to ${database.driver.destination.dir}" />
+    <copy file="${jbpm.home}/lib/${database.driver}" todir="${database.driver.destination.dir}" />
+  </target>
+
+  <target name="internal.set.signavio.repo.dir">
+    <mkdir dir="${jbpm.home}/${signavio.repo.dir.name}" />
+    
+    <!-- unzip the signavio war -->
+    <delete dir="${signavio.tmp.dir}" />
+    <mkdir dir="${signavio.tmp.dir}" />
+    <unzip src="${jbpm.home}/install/src/signavio/${signavio.war.file.name}" dest="${signavio.tmp.dir}" />
+  	
+  	<!-- Replace Windows backslash with forward slash (see JBPM-2540) -->
+  	<pathconvert property="signavio.repo.path" targetos="unix">
+  	  <map from="${basedir}/" to='' />
+  	  <map from="${basedir}\\" to='' />
+  	  <path location="${jbpm.home}/${signavio.repo.dir.name}"/>
+  	</pathconvert>
+    
+    <!-- replace the repo dir in he unzipped WEB-INF/web.xml -->
+    <replaceregexp file="${signavio.tmp.dir}/WEB-INF/web.xml" flags="s"
+                   match="&lt;param-name&gt;fileSystemRootDirectory&lt;/param-name&gt;.*?&lt;param-value&gt;.*?&lt;/param-value&gt;"
+                   replace="&lt;param-name&gt;fileSystemRootDirectory&lt;/param-name&gt;&lt;param-value&gt;${signavio.repo.path}&lt;/param-value&gt;"/>
+    
+    <!-- zip it up again and copy it back to the signavio src dir-->
+    <zip destfile="${signavio.tmp.dir}/${signavio.war.file.name}" basedir="${signavio.tmp.dir}" />
+    <copy file="${signavio.tmp.dir}/${signavio.war.file.name}" todir="${signavio.src.dir}" overwrite="true"/>
+  </target>
+
+  <target name="internal.install.eclipse.windows" if="isWindows">
+    <unzip src="${eclipse.distro.dir}/${eclipse.filename}" dest="${jbpm.home}" overwrite="true" />
+  </target>
+
+  <target name="internal.install.eclipse.non.windows" if="isNotWindows">
+    <gunzip src="${eclipse.distro.dir}/${eclipse.filename}" dest="${eclipse.distro.dir}" />
+    <untar src="${eclipse.distro.dir}/${eclipse.tarfilename}" dest="${jbpm.home}" overwrite="true" />
+    <delete file="${eclipse.distro.dir}/${eclipse.tarfilename}"/>
+  </target>
+
+</project>

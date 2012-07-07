@@ -1,0 +1,99 @@
+<html>
+	<head>
+
+		<script type="text/javascript" src="js/json/json2.js"></script>
+		<script type="text/javascript" src="js/swfobject.js"></script>
+		<script type="text/javascript">
+			swfobject.embedSWF("open-flash-chart.swf", "my_chart", "350", "200", "9.0.0");
+		</script>
+		<script type="text/javascript">
+			function ofc_ready()
+			{
+			    alert('ofc_ready');
+			}
+			
+			function open_flash_chart_data()
+			{
+			    alert( 'reading data' );
+			    return JSON.stringify(data_1);
+			}
+			
+			function load_1()
+			{
+			  tmp = findSWF("my_chart");
+			  x = tmp.load( JSON.stringify(data_1) );
+			}
+			
+			function load_2()
+			{
+			  //alert("loading data_2");
+			  tmp = findSWF("my_chart");
+			  x = tmp.load( JSON.stringify(data_2) );
+			}
+			
+			function findSWF(movieName) {
+			  if (navigator.appName.indexOf("Microsoft")!= -1) {
+			    return window[movieName];
+			  } else {
+			    return document[movieName];
+			  }
+			}
+			    
+			var data_1 = {
+			  "elements": [
+			    {
+			      "type": "bar",
+			      "values": [
+			        9,
+			        8,
+			        7,
+			        6,
+			        5,
+			        4,
+			        3,
+			        2,
+			        1
+			      ]
+			    }
+			  ],
+			  "title": {
+			    "text": "Mon Nov 30 2009"
+			  }
+			};
+			var data_2 = {
+			  "elements": [
+			    {
+			      "type": "bar",
+			      "values": [
+			        7,
+			        10,
+			        8,
+			        6,
+			        1,
+			        4,
+			        10,
+			        3,
+			        10
+			      ]
+			    }
+			  ],
+			  "title": {
+			    "text": "Chart 2 :-)"
+			  }
+			};
+		</script>
+	</head>
+	<body>
+		<p>
+			Open Flash Chart
+		</p>
+
+		<div id="my_chart"></div>
+		<br>
+		<a href="javascript:load_1()">display data_1</a> ||
+		<a href="javascript:load_2()">display data_2</a>
+		<p>
+			Don't forget to 'view source' to see how the Javascript JSON data is loaded.
+		</p>
+	</body>
+</html>

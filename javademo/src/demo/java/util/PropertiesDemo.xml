@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>aaa</comment>
+<entry key="jdbc.drivers">com.mysql.jdbc.Driver</entry>
+<entry key="pool.maxwait">10000</entry>
+<entry key="now">Mon Aug 03 14:03:57 CST 2009</entry>
+<entry key="jdbc.password"/>
+<entry key="pool.initialsize">5</entry>
+<entry key="jdbc.url">jdbc:mysql://localhost:3306/blog?characterEncoding=UTF-8&amp;zeroDateTimeBehavior=round</entry>
+<entry key="jdbc.username">root</entry>
+<entry key="pool.maxactive">50</entry>
+<entry key="pool.maxidle">10</entry>
+</properties>
